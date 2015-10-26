@@ -1,5 +1,9 @@
 [
   {
+    "path":"myresource",
+    "methods":["GET"]
+  },
+  {
     "path": "users",
     "methods": ["POST"]
   },
