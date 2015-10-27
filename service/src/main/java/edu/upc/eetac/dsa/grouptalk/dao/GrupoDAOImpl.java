@@ -2,14 +2,11 @@ package edu.upc.eetac.dsa.grouptalk.dao;
 
 import edu.upc.eetac.dsa.grouptalk.entity.Grupo;
 import edu.upc.eetac.dsa.grouptalk.entity.GrupoCollection;
-import edu.upc.eetac.dsa.grouptalk.entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class GrupoDAOImpl implements GrupoDAO{
@@ -183,5 +180,30 @@ public class GrupoDAOImpl implements GrupoDAO{
             if (connection != null) connection.close();
         }
         return grupo;
+    }
+
+    @Override
+    public boolean comprobarUsuarioengrupo(String grupoid, String userid) throws SQLException, RelacionNoExisteException {
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+            stmt = connection.prepareStatement(GrupoDAOQuery.COMPROBAR_USER_ASIGNADO_A_GRUPO);
+            stmt.setString(1, grupoid);
+            stmt.setString(2, userid);
+            int rows = stmt.executeUpdate();
+                if (rows!=1) throw new RelacionNoExisteException();
+        }
+        catch (SQLException e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return true;
     }
 }

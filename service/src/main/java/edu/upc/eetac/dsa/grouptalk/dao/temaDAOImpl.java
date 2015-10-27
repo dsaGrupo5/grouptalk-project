@@ -11,19 +11,21 @@ import java.sql.SQLException;
 public class temaDAOImpl implements temaDAO
     {
         @Override
-        public Tema crear_tema(String userid,String grupoid,String nombre,String comentario) throws SQLException,UserNoExisteException, GrupoNoExisteException{
+        public Tema crear_tema(String loginid,String nombregrupo,String nombre,String comentario) throws SQLException,UserNoExisteException, GrupoNoExisteException{
             Connection connection = null;
             PreparedStatement stmt = null;
-            String id;
+            String id = null;
 
             try {
                 UserDAOImpl comprobaruser = new UserDAOImpl();
-                User user = comprobaruser.obtener_UserById(userid);
+                User user = comprobaruser.obtener_UserByLoginid(loginid);
                 if (user == null) throw new UserNoExisteException();
 
                 GrupoDAOImpl comprobargrupo = new GrupoDAOImpl();
-                Grupo grupo = comprobargrupo.obtener_NOMBRE_por_ID(grupoid);
+                Grupo grupo = comprobargrupo.obtener_ID_grupo_por_NOMBRE(nombregrupo);
                 if (grupo == null) throw new GrupoNoExisteException();
+
+                comprobargrupo.comprobarUsuarioengrupo(grupo.getId(),user.getId());
 
                 connection = Database.getConnection();
                 stmt = connection.prepareStatement(temaDAOQuery.UUID);
@@ -37,13 +39,16 @@ public class temaDAOImpl implements temaDAO
                 stmt.close();
                 stmt = connection.prepareStatement(temaDAOQuery.CREAR_TEMA);
                 stmt.setString(1, id);
-                stmt.setString(2, userid);
-                stmt.setString(3, grupoid);
-                stmt.setString(4, comentario);
+                stmt.setString(2, user.getId());
+                stmt.setString(3, grupo.getId());
+                stmt.setString(4, nombre);
+                stmt.setString(5, comentario);
                 stmt.executeUpdate();
                 stmt.close();
             } catch (SQLException e) {
                 throw e;
+            } catch (RelacionNoExisteException e) {
+                e.printStackTrace();
             } finally {
                 if (stmt != null) stmt.close();
                 if (connection != null) {

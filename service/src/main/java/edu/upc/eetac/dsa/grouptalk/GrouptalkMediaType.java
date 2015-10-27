@@ -7,4 +7,5 @@ public interface GrouptalkMediaType {
     public final static String GROUPTALK_AUTH_TOKEN = "appplication/vnd.dsa.grouptalk.auth-token+json";
     public final static String GROUPTALK_USER = "application/vnd.dsa.grouptalk.user+json";
     public final static String GROUPTALK_GRUPO = "application/vnd.dsa.grouptalk.grupo+json";
+    public final static String GROUPTALK_TEMA = "application/vnd.dsa.grouptalk.tema+json";
 }

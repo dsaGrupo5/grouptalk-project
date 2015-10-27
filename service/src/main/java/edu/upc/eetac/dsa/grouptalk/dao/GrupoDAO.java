@@ -16,4 +16,5 @@ public interface GrupoDAO {
     public GrupoCollection obtener_coleccion()throws SQLException;
     public Grupo obtener_NOMBRE_por_ID(String id)throws SQLException;
     public Grupo obtener_ID_grupo_por_NOMBRE(String nombre)throws SQLException;
+    public boolean comprobarUsuarioengrupo(String grupoid, String userid)throws RelacionNoExisteException, SQLException;
 }
