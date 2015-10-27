@@ -47,19 +47,19 @@ public class GrupoDAOImpl implements GrupoDAO{
         return obtener_NOMBRE_por_ID(id);
     }
     @Override
-    public boolean ingresar_grupo(String grupoid,String userid)throws SQLException,GrupoNoExisteException,UserNoExisteException{
+    public boolean ingresar_grupo(String nombre_grupo,String nombre_usuario)throws SQLException,GrupoNoExisteException,UserNoExisteException{
         Connection connection = null;
         PreparedStatement stmt = null;
         UserDAOImpl comprobarUser = new UserDAOImpl();
         try {
-            Grupo grupo = obtener_NOMBRE_por_ID(grupoid);
-            comprobarUser.obtener_UserById(userid);
+            Grupo grupo = obtener_ID_grupo_por_NOMBRE(nombre_grupo);
+            comprobarUser.obtener_UserByLoginid(nombre_usuario);
             if (grupo == null)throw new GrupoNoExisteException();
             if (comprobarUser == null) throw new UserNoExisteException();
             connection = Database.getConnection();
             stmt = connection.prepareStatement(GrupoDAOQuery.INGRESAR_GRUPO);
-            stmt.setString(1, grupoid);
-            stmt.setString(2, userid);
+            stmt.setString(1, obtener_ID_grupo_por_NOMBRE(nombre_grupo).getId());
+            stmt.setString(2,comprobarUser.obtener_UserByLoginid(nombre_usuario).getLoginid());
             stmt.executeUpdate();
             return true ;
         } catch (SQLException e) {

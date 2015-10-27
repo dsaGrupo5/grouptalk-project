@@ -15,9 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
-/**
- * Created by carlos on 26/10/2015.
- */
+
 @RolesAllowed({"administrador"})
 @Path("grupo")
 public class GroupResource {
@@ -42,28 +40,29 @@ public class GroupResource {
         return Response.created(uri).type(GrouptalkMediaType.GROUPTALK_GRUPO).entity(grupo).build();
 
     }
-
-    @Path("/{id}")
+    @RolesAllowed({"resgistrado"})
+    @Path(("grupo/ingresar_grupo"))
     @POST
     public void ingresarGrupo(@FormParam("nombregrupo") String nombregrupo,@FormParam("nombreuser") String nombreuser, @Context UriInfo uriInfo) throws URISyntaxException, GrupoNoExisteException, UserNoExisteException, SQLException {
 
-        String userid;
+        if(nombregrupo == null||nombreuser == null)
+            throw new BadRequestException("es necesario rellenar todos los campos");
         GrupoDAO grupoDAO = new GrupoDAOImpl();
+        try
+        {
+            grupoDAO.ingresar_grupo(nombregrupo,nombreuser);
 
-        Grupo grupo = null;
-        User user = null;
-        grupo = grupoDAO.obtener_ID_grupo_por_NOMBRE(nombregrupo);
-        //fata comprobar si el usuario existe
-
-        if(grupo == null)
-            throw new BadRequestException("es necesario un id de grupo");
-        if(user == null)
-            throw new BadRequestException("es necesario un id de usuario");
-
-
-
+        }
+        catch (GrupoNoExisteException e)
+        {
+            throw new WebApplicationException("este grupo no existe!!", Response.Status.CONFLICT);
+        }
+        catch (UserNoExisteException e) {
+            throw new WebApplicationException("este grupo no existe!!", Response.Status.CONFLICT);
+        }
+        catch(SQLException e)
+            {
+            throw new InternalServerErrorException();
+        }
     }
-
-
-
 }
