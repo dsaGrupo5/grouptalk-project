@@ -6,9 +6,5 @@
   {
     "path": "users",
     "methods": ["POST"]
-  },
-  {
-    "path": "grupo",
-    "methods": ["POST"]
   }
 ]

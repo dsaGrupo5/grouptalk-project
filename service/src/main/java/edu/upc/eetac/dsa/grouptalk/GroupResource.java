@@ -5,6 +5,7 @@ import edu.upc.eetac.dsa.grouptalk.entity.AuthToken;
 import edu.upc.eetac.dsa.grouptalk.entity.Grupo;
 import edu.upc.eetac.dsa.grouptalk.entity.User;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 /**
  * Created by carlos on 26/10/2015.
  */
-
+@RolesAllowed({"administrador"})
 @Path("grupo")
 public class GroupResource {
     @Context
