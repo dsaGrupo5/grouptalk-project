@@ -59,7 +59,7 @@ public class GrupoDAOImpl implements GrupoDAO{
             connection = Database.getConnection();
             stmt = connection.prepareStatement(GrupoDAOQuery.INGRESAR_GRUPO);
             stmt.setString(1, obtener_ID_grupo_por_NOMBRE(nombre_grupo).getId());
-            stmt.setString(2,comprobarUser.obtener_UserByLoginid(nombre_usuario).getLoginid());
+            stmt.setString(2,comprobarUser.obtener_UserByLoginid(nombre_usuario).getId());
             stmt.executeUpdate();
             return true ;
         } catch (SQLException e) {

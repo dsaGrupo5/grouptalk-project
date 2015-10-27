@@ -7,22 +7,23 @@ import edu.upc.eetac.dsa.grouptalk.entity.User;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
 
-@RolesAllowed({"administrador"})
+
 @Path("grupo")
 public class GroupResource {
     @Context
     private SecurityContext securityContext;
+    @RolesAllowed({"administrador"})
     @POST
-    public Response crearGrupo(@FormParam("nombre") String nombre, @Context UriInfo uriInfo) throws URISyntaxException, GrupoAlreadyExistException, SQLException {
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(GrouptalkMediaType.GROUPTALK_GRUPO)
+    public Response crearGrupo(@FormParam("nombre") String nombre, @Context UriInfo uriInfo) throws URISyntaxException, GrupoAlreadyExistException, SQLException
+    {
         if(nombre == null)
             throw new BadRequestException("es necesario un nombre de grupo");
         GrupoDAO grupoDAO = new GrupoDAOImpl();
@@ -40,10 +41,12 @@ public class GroupResource {
         return Response.created(uri).type(GrouptalkMediaType.GROUPTALK_GRUPO).entity(grupo).build();
 
     }
-    @RolesAllowed({"resgistrado"})
-    @Path(("grupo/ingresar_grupo"))
+    @RolesAllowed({"registrado"})
+    @Path(("/ingresar_grupo"))
     @POST
-    public void ingresarGrupo(@FormParam("nombregrupo") String nombregrupo,@FormParam("nombreuser") String nombreuser, @Context UriInfo uriInfo) throws URISyntaxException, GrupoNoExisteException, UserNoExisteException, SQLException {
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+     public Response ingresarGrupo(@FormParam("nombregrupo") String nombregrupo,@FormParam("nombreuser") String nombreuser, @Context UriInfo uriInfo) throws URISyntaxException, GrupoNoExisteException, UserNoExisteException, SQLException
+    {
 
         if(nombregrupo == null||nombreuser == null)
             throw new BadRequestException("es necesario rellenar todos los campos");
@@ -64,5 +67,7 @@ public class GroupResource {
             {
             throw new InternalServerErrorException();
         }
+        return Response.ok().build();
+
     }
 }
