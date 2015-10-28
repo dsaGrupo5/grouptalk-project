@@ -165,7 +165,6 @@ public class GrupoDAOImpl implements GrupoDAO{
             stmt = connection.prepareStatement(GrupoDAOQuery.OBTENER_ID_GRUPO_POR_NOMBRE);
             stmt.setString(1, nombre);
             ResultSet rs = stmt.executeQuery();
-            boolean first = true;
             while (rs.next()) {
                 grupo = new Grupo();
                 grupo.setId(rs.getString("id"));
@@ -185,17 +184,21 @@ public class GrupoDAOImpl implements GrupoDAO{
     }
 
     @Override
-    public boolean comprobarUsuarioengrupo(String grupoid, String userid) throws SQLException, RelacionNoExisteException {
+    public Grupo comprobarUsuarioengrupo(String grupoid, String userid) throws SQLException, RelacionNoExisteException {
 
         Connection connection = null;
         PreparedStatement stmt = null;
+        Grupo grupo = null;
         try {
             connection = Database.getConnection();
             stmt = connection.prepareStatement(GrupoDAOQuery.COMPROBAR_USER_ASIGNADO_A_GRUPO);
             stmt.setString(1, grupoid);
             stmt.setString(2, userid);
-            int rows = stmt.executeUpdate();
-                if (rows!=1) throw new RelacionNoExisteException();
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                grupo = new Grupo();
+                grupo.setId(rs.getString("grupoid"));
+            }
         }
         catch (SQLException e)
         {
@@ -206,6 +209,6 @@ public class GrupoDAOImpl implements GrupoDAO{
             if (stmt != null) stmt.close();
             if (connection != null) connection.close();
         }
-        return true;
+        return grupo;
     }
 }
