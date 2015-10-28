@@ -70,4 +70,32 @@ public class GroupResource {
         return Response.ok().build();
 
     }
+    @RolesAllowed({"registrado"})
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response abandonarGrupo(@FormParam("nombregrupo") String nombregrupo,@FormParam("nombreuser") String nombreuser, @Context UriInfo uriInfo) throws URISyntaxException, GrupoNoExisteException, UserNoExisteException, SQLException
+    {
+        if(nombregrupo == null||nombreuser == null)
+            throw new BadRequestException("es necesario rellenar todos los campos");
+        GrupoDAO grupoDAO = new GrupoDAOImpl();
+        try
+        {
+            grupoDAO.abandonar_grupo(nombregrupo,nombreuser);
+
+        }
+        catch (GrupoNoExisteException e)
+        {
+            throw new WebApplicationException("este grupo no existe!!", Response.Status.CONFLICT);
+        }
+        catch (UserNoExisteException e) {
+            throw new WebApplicationException("este usuario no existe!!", Response.Status.CONFLICT);
+        }
+        catch(SQLException e)
+        {
+            throw new InternalServerErrorException();
+        }
+        return Response.ok().build();
+
+    }
+
 }

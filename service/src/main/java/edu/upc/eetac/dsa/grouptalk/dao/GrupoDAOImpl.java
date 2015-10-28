@@ -2,6 +2,7 @@ package edu.upc.eetac.dsa.grouptalk.dao;
 
 import edu.upc.eetac.dsa.grouptalk.entity.Grupo;
 import edu.upc.eetac.dsa.grouptalk.entity.GrupoCollection;
+import edu.upc.eetac.dsa.grouptalk.entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -71,19 +72,20 @@ public class GrupoDAOImpl implements GrupoDAO{
 
     }
     @Override
-    public boolean abandonar_grupo(String grupoid,String userid)throws SQLException,GrupoNoExisteException, UserNoExisteException{
+    public boolean abandonar_grupo(String nombregrupo,String nombreusuario)throws SQLException,GrupoNoExisteException, UserNoExisteException{
         Connection connection = null;
         PreparedStatement stmt = null;
         UserDAOImpl comprobarUser = new UserDAOImpl();
+        User user = null;
         try {
-            Grupo grupo = obtener_NOMBRE_por_ID(grupoid);
-            comprobarUser.obtener_UserById(userid);
+            Grupo grupo =obtener_ID_grupo_por_NOMBRE(nombregrupo);
+            user = comprobarUser.obtener_UserByLoginid(nombreusuario);
             if (grupo == null)throw new GrupoNoExisteException();
-            if (comprobarUser == null) throw new UserNoExisteException();
+            if (user == null) throw new UserNoExisteException();
             connection = Database.getConnection();
             stmt = connection.prepareStatement(GrupoDAOQuery.ABANDONAR_GRUPO);
-            stmt.setString(1, grupoid);
-            stmt.setString(2, userid);
+            stmt.setString(1,grupo.getId());
+            stmt.setString(2,user.getId());
             stmt.executeUpdate();
             return true ;
         } catch (SQLException e) {
