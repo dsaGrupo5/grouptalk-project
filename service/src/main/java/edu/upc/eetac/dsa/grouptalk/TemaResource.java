@@ -47,20 +47,46 @@ public class TemaResource {
 
     }
 
-    /**@Path("/{id}")
+    @Path("/{id}")
     @DELETE
-    public void eliminarTema(@PathParam("idtema") String id) {
+    public void eliminarTema(@PathParam("id") String id) throws TemaIDNoExisteException {
 
-        Tema temaid = securityContext.getUserPrincipal().getName();
-        StingDAO stingDAO = new StingDAOImpl();
+        String temaid = securityContext.getUserPrincipal().getName();
+        temaDAO temadao = new temaDAOImpl();
         try {
-            String ownerid = stingDAO.getStingById(id).getUserid();
-            if(!userid.equals(ownerid))
-                throw new ForbiddenException("operation not allowed");
-            if(!stingDAO.deleteSting(id))
-                throw new NotFoundException("Sting with id = "+id+" doesn't exist");
+            String idusercreador = temadao.obtener_tema_por_id(id).getUserid();
+            if(!temaid.equals(idusercreador))
+                throw new ForbiddenException("este usuario no ha creado este tema!");
+            if(!temadao.eliminar_tema(id))
+                throw new TemaIDNoExisteException();
         } catch (SQLException e) {
             throw new InternalServerErrorException();
         }
-    }**/
+    }
+
+    @Path("/{id}")
+    @PUT
+    @Consumes(GrouptalkMediaType.GROUPTALK_TEMA)
+    @Produces(GrouptalkMediaType.GROUPTALK_TEMA)
+    public Tema updateTema(@PathParam("id") String id, Tema tema) throws TemaIDNoExisteException {
+        if(tema == null)
+            throw new BadRequestException("no se ha pasado el tema a modificar!");
+        if(!id.equals(tema.getId()))
+            throw new BadRequestException("path parameter id and entity parameter id doesn't match");
+
+        String temaid = securityContext.getUserPrincipal().getName();
+        if(!temaid.equals(id))
+            throw new ForbiddenException("operation not allowed");
+
+        temaDAO userDAO = new temaDAOImpl();
+        try {
+            tema = userDAO.modificar_comentario(tema.getId(),tema.getComentario());
+
+            if(tema == null)
+                throw new NotFoundException("El tema con id = "+id+" no existe");
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+        return tema;
+    }
 }

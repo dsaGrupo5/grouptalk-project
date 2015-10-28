@@ -93,8 +93,8 @@ public class temaDAOImpl implements temaDAO
                 if (tema == null) throw new TemaIDNoExisteException();
                 connection = Database.getConnection();
                 stmt = connection.prepareStatement(temaDAOQuery.MODIFICAR_COMENTARIO_TEMA);
-                stmt.setString(1, id);
-                stmt.setString(2, comentario);
+                stmt.setString(1, comentario);
+                stmt.setString(2, id);
                 int rows = stmt.executeUpdate();
                 if (rows == 1) {tema = obtener_tema_por_id(id);}
             }
@@ -159,7 +159,6 @@ public class temaDAOImpl implements temaDAO
 
                 stmt = connection.prepareStatement(temaDAOQuery.OBTENER_TEMA_POR_ID);
                 stmt.setString(1, id);
-
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next())
                 {
