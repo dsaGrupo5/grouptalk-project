@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.grouptalk;
 import edu.upc.eetac.dsa.grouptalk.dao.*;
 import edu.upc.eetac.dsa.grouptalk.entity.Grupo;
 import edu.upc.eetac.dsa.grouptalk.entity.Tema;
+import edu.upc.eetac.dsa.grouptalk.entity.TemaCollection;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -16,7 +17,8 @@ import java.sql.SQLException;
  */
 @RolesAllowed({"registrado"})
 @Path("grupo/tema")
-public class TemaResource {
+public class TemaResource
+{
     @Context
     private SecurityContext securityContext;
     @POST
@@ -64,10 +66,28 @@ public class TemaResource {
         }
     }
 
+
+    @RolesAllowed({"registrado"})
+    @Path(("/obtenertemas"))
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(GrouptalkMediaType.GROUPTALK_RESPUESTA_COLLECTION)
+    public TemaCollection obtenerTemas(@FormParam("nombreGrupo") String nombreGrupo) throws URISyntaxException, SQLException, GrupoNoExisteException {
+        if(nombreGrupo == null)throw new BadRequestException("es necesario rellenar todos los campos");
+
+        temaDAO temadao = new temaDAOImpl();
+        TemaCollection colecciontemas = new TemaCollection();
+
+        try{colecciontemas = temadao.obtener_coleccion_temas_por_nombreGrupo(nombreGrupo);}
+        catch (GrupoNoExisteException g){g.printStackTrace();}
+        catch(SQLException e){throw new InternalServerErrorException();}
+
+        return colecciontemas;
+    }
     @Path("/{id}")
     @PUT
-    @Consumes(GrouptalkMediaType.GROUPTALK_TEMA)
-    @Produces(GrouptalkMediaType.GROUPTALK_TEMA)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(GrouptalkMediaType.GROUPTALK_TEMA_COLLECTION)
     public Tema updateTema(@PathParam("id") String id, Tema tema) throws TemaIDNoExisteException {
         if(tema == null)
             throw new BadRequestException("no se ha pasado el tema a modificar!");

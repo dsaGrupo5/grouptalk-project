@@ -112,17 +112,18 @@ public class temaDAOImpl implements temaDAO
 
         }
         @Override
-        public TemaCollection obtener_coleccion_temas_por_groupid(String grupoid)throws SQLException, GrupoNoExisteException{
+        public TemaCollection obtener_coleccion_temas_por_nombreGrupo(String nombreGrupo)throws SQLException, GrupoNoExisteException{
             Tema tema = null;
             TemaCollection temcol = new TemaCollection();
             Connection connection = null;
             PreparedStatement stmt = null;
             try{
                 GrupoDAOImpl comprobargroupìd= new GrupoDAOImpl();
-                Grupo grupo = comprobargroupìd.obtener_ID_grupo_por_NOMBRE(grupoid);
+                Grupo grupo = comprobargroupìd.obtener_ID_grupo_por_NOMBRE(nombreGrupo);
                 if (grupo == null) throw  new GrupoNoExisteException();
+                connection = Database.getConnection();
                 stmt = connection.prepareStatement(temaDAOQuery.OBTENER_COLECCION_TEMAS_POR_GROUPID);
-                stmt.setString(1, grupoid);
+                stmt.setString(1, grupo.getId());
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next())
                 {

@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.grouptalk;
 import edu.upc.eetac.dsa.grouptalk.dao.*;
 import edu.upc.eetac.dsa.grouptalk.entity.AuthToken;
 import edu.upc.eetac.dsa.grouptalk.entity.Grupo;
+import edu.upc.eetac.dsa.grouptalk.entity.GrupoCollection;
 import edu.upc.eetac.dsa.grouptalk.entity.User;
 
 import javax.annotation.security.RolesAllowed;
@@ -81,7 +82,7 @@ public class GroupResource {
         GrupoDAO grupoDAO = new GrupoDAOImpl();
         try
         {
-            grupoDAO.abandonar_grupo(nombregrupo,nombreuser);
+            grupoDAO.abandonar_grupo(nombregrupo, nombreuser);
 
         }
         catch (GrupoNoExisteException e)
@@ -99,4 +100,22 @@ public class GroupResource {
 
     }
 
+    @Path(("/obtenergrupos"))
+    @GET
+    @Produces(GrouptalkMediaType.GROUPTALK_GRUPO_COLLECTION)
+    public GrupoCollection obtenerGrupo() throws URISyntaxException, SQLException
+    {
+        GrupoDAO grupoDAO = new GrupoDAOImpl();
+        GrupoCollection colecciongrupos = new GrupoCollection();
+        try
+        {
+            colecciongrupos = grupoDAO.obtener_coleccion();
+
+        }
+        catch(SQLException e)
+        {
+            throw new InternalServerErrorException();
+        }
+        return colecciongrupos;
+    }
 }

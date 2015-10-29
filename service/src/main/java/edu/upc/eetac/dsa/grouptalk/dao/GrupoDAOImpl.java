@@ -184,7 +184,6 @@ public class GrupoDAOImpl implements GrupoDAO{
         }
         return grupo;
     }
-
     @Override
     public Grupo comprobarUsuarioengrupo(String grupoid, String userid) throws SQLException, RelacionNoExisteException {
 
