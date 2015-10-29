@@ -10,4 +10,7 @@ public interface GrouptalkMediaType {
     public final static String GROUPTALK_TEMA = "application/vnd.dsa.grouptalk.tema+json";
     public final static String GROUPTALK_RESPUESTA = "application/vnd.dsa.grouptalk.tema+json";
     public final static String GROUPTALK_RESPUESTA_COLLECTION = "application/vnd.dsa.grouptalk.respuesta.collection+json";
+    public final static String GROUPTALK_ROOT = "application/vnd.dsa.grouptalk.root+json";
+    public final static String GROUPTALK_GRUPO_COLLECTION = "application/vnd.dsa.grouptalk.grupo.collection+json";
+
 }
