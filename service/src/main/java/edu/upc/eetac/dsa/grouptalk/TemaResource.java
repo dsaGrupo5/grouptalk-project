@@ -71,7 +71,7 @@ public class TemaResource
     @Path(("/obtenertemas"))
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(GrouptalkMediaType.GROUPTALK_RESPUESTA_COLLECTION)
+    @Produces(GrouptalkMediaType.GROUPTALK_TEMA_COLLECTION)
     public TemaCollection obtenerTemas(@FormParam("nombreGrupo") String nombreGrupo) throws URISyntaxException, SQLException, GrupoNoExisteException {
         if(nombreGrupo == null)throw new BadRequestException("es necesario rellenar todos los campos");
 
@@ -84,10 +84,12 @@ public class TemaResource
 
         return colecciontemas;
     }
+
+    @RolesAllowed({"registrado"})
     @Path("/{id}")
     @PUT
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(GrouptalkMediaType.GROUPTALK_TEMA_COLLECTION)
+    @Produces(GrouptalkMediaType.GROUPTALK_TEMA)
     public Tema updateTema(@PathParam("id") String id, Tema tema) throws TemaIDNoExisteException {
         if(tema == null)
             throw new BadRequestException("no se ha pasado el tema a modificar!");
