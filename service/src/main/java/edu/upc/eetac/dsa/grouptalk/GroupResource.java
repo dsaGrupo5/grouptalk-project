@@ -71,9 +71,10 @@ public class GroupResource {
 
     }
     @RolesAllowed({"registrado"})
+    @Path(("/abandonar_grupo"))
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response abandonarGrupo(@FormParam("nombregrupo") String nombregrupo,@FormParam("nombreuser") String nombreuser, @Context UriInfo uriInfo) throws URISyntaxException, GrupoNoExisteException, UserNoExisteException, SQLException
+    public Response abandonarGrupo(@FormParam("nombregrupo") String nombregrupo,@FormParam("nombreuser") String nombreuser, @Context UriInfo uriInfo) throws URISyntaxException, GrupoNoExisteException, UserNoExisteException, SQLException,RelacionNoExisteException
     {
         if(nombregrupo == null||nombreuser == null)
             throw new BadRequestException("es necesario rellenar todos los campos");

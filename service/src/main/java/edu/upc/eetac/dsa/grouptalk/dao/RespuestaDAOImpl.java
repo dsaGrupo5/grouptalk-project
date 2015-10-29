@@ -42,7 +42,7 @@ public class RespuestaDAOImpl implements RespuestaDAO{
         return respuesta;
     }
     @Override
-    public Respuesta crear_respuesta(String temaid, String userid, String respuesta) throws SQLException, UserNoExisteException, TemaIDNoExisteException {
+    public Respuesta crear_respuesta(String nombreTema, String nombreUser, String respuesta) throws SQLException, UserNoExisteException, TemaIDNoExisteException {
         boolean c;
         String id;
         Connection connection = null;
@@ -51,10 +51,11 @@ public class RespuestaDAOImpl implements RespuestaDAO{
         try {
             tema = new Tema();
             UserDAOImpl comprobaruser = new UserDAOImpl();
-            User user = comprobaruser.obtener_UserById(userid);
-            temaDAOImpl comprobartema = new temaDAOImpl();
-            tema = comprobartema.obtener_tema_por_id(temaid);
+            User user = comprobaruser.obtener_UserByLoginid(nombreUser);
             if (user == null) throw new UserNoExisteException();
+
+            temaDAOImpl comprobartema = new temaDAOImpl();
+            tema = comprobartema.obtener_id_por_nombreTema(nombreTema);
             if (tema == null) throw new TemaIDNoExisteException();
             connection = Database.getConnection();
             stmt = connection.prepareStatement(RespuestaDAOQuery.UUID);
@@ -67,8 +68,8 @@ public class RespuestaDAOImpl implements RespuestaDAO{
             stmt.close();
             stmt = connection.prepareStatement(RespuestaDAOQuery.CREAR_RESPUESTA);
             stmt.setString(1, id);
-            stmt.setString(2, temaid);
-            stmt.setString(3, userid);
+            stmt.setString(2, tema.getId());
+            stmt.setString(3, user.getId());
             stmt.setString(4, respuesta);
             stmt.executeUpdate();
             stmt.close();
@@ -139,7 +140,7 @@ public class RespuestaDAOImpl implements RespuestaDAO{
 
     }
     @Override
-    public RespuestaCollection obtener_respuestas_por_User(String userid) throws SQLException,  UserNoExisteException {
+    public RespuestaCollection obtener_respuestas_por_User(String nombreUser) throws SQLException,  UserNoExisteException {
         Respuesta resp = null;
         RespuestaCollection respcol = new RespuestaCollection();
         Connection connection = null;
@@ -147,10 +148,10 @@ public class RespuestaDAOImpl implements RespuestaDAO{
 
         try {
             UserDAOImpl comprobaruser = new UserDAOImpl();
-            User user = comprobaruser.obtener_UserById(userid);
+            User user = comprobaruser.obtener_UserByLoginid(nombreUser);
             if (user == null) throw new UserNoExisteException();
             stmt = connection.prepareStatement(RespuestaDAOQuery.OBTENER_COLECCION_RESPUESTAS_APARTIR_USERID);
-            stmt.setString(1, userid);
+            stmt.setString(1, user.getId());
             ResultSet rs = stmt.executeQuery();
             while (rs.next())
             {

@@ -10,6 +10,8 @@ public class temaDAOQuery {
     public final static String OBTENER_COLECCION_TEMAS_POR_GROUPID = "select hex(id) as id,hex(t.userid) as userid, hex(t.grupoid) as grupoid, t.nombre, t.comentario from tema where grupoid=unhex(?)";
     public final static String ELIMINAR_TEMA = "delete from tema where id=unhex(?)";
     public final static String MODIFICAR_COMENTARIO_TEMA = "update tema set comentario=? where id=unhex(?)";
+    public final static String OBTENER_ID_POR_NOMBRETEMA = "select hex(t.id) as id,hex(t.userid) as userid, hex(t.grupoid) as grupoid, t.nombre, t.comentario from tema t where nombre=?";
+
 
 
 

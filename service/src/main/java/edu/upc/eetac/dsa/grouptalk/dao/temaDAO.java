@@ -12,4 +12,5 @@ public interface temaDAO {
     public Tema modificar_comentario(String id,String contenido) throws SQLException,TemaIDNoExisteException;
     public TemaCollection obtener_coleccion_temas_por_groupid(String grupoid)throws SQLException,GrupoNoExisteException;
     public Tema obtener_tema_por_id(String id)throws SQLException;
+    public Tema obtener_id_por_nombreTema(String nombreTema)throws SQLException;
 }

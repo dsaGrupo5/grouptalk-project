@@ -12,7 +12,7 @@ public interface GrupoDAO {
 
     public Grupo crear_grupo(String nombre)throws SQLException,GrupoAlreadyExistException;
     public boolean ingresar_grupo(String grupoid,String userid)throws SQLException,GrupoNoExisteException,UserNoExisteException;
-    public boolean abandonar_grupo(String grupoid,String userid)throws SQLException,GrupoNoExisteException,UserNoExisteException;
+    public boolean abandonar_grupo(String grupoid,String userid)throws SQLException,GrupoNoExisteException,UserNoExisteException,RelacionNoExisteException;
     public GrupoCollection obtener_coleccion()throws SQLException;
     public Grupo obtener_NOMBRE_por_ID(String id)throws SQLException;
     public Grupo obtener_ID_grupo_por_NOMBRE(String nombre)throws SQLException;

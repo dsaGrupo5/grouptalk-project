@@ -178,6 +178,36 @@ public class temaDAOImpl implements temaDAO
             }
             return tema;
         }
+        @Override
+        public Tema obtener_id_por_nombreTema(String nombreTema)throws SQLException{
+                Tema tema= null;
+                Connection connection = null;
+                PreparedStatement stmt = null;
+                try {
+                    connection = Database.getConnection();
+
+                    stmt = connection.prepareStatement(temaDAOQuery.OBTENER_ID_POR_NOMBRETEMA);
+                    stmt.setString(1, nombreTema);
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next())
+                    {
+                        tema = new Tema();
+                        tema.setId(rs.getString("id"));
+                        tema.setUserid(rs.getString("userid"));
+                        tema.setGrupoid(rs.getString("grupoid"));
+                        tema.setNombre(rs.getString("nombre"));
+                        tema.setComentario(rs.getString("comentario"));
+
+                    }
+                } catch (SQLException e) {
+                    throw e;
+                } finally {
+                    if (stmt != null) stmt.close();
+                    if (connection != null) connection.close();
+                }
+                return tema;
+
+        }
     }
 
 

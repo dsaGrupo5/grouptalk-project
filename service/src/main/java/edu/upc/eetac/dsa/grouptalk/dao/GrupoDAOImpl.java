@@ -72,7 +72,7 @@ public class GrupoDAOImpl implements GrupoDAO{
 
     }
     @Override
-    public boolean abandonar_grupo(String nombregrupo,String nombreusuario)throws SQLException,GrupoNoExisteException, UserNoExisteException{
+    public boolean abandonar_grupo(String nombregrupo,String nombreusuario)throws SQLException,GrupoNoExisteException, UserNoExisteException,RelacionNoExisteException{
         Connection connection = null;
         PreparedStatement stmt = null;
         UserDAOImpl comprobarUser = new UserDAOImpl();
@@ -82,6 +82,8 @@ public class GrupoDAOImpl implements GrupoDAO{
             user = comprobarUser.obtener_UserByLoginid(nombreusuario);
             if (grupo == null)throw new GrupoNoExisteException();
             if (user == null) throw new UserNoExisteException();
+            grupo = comprobarUsuarioengrupo(grupo.getId(), user.getId());
+            if (grupo == null)throw new RelacionNoExisteException();
             connection = Database.getConnection();
             stmt = connection.prepareStatement(GrupoDAOQuery.ABANDONAR_GRUPO);
             stmt.setString(1,grupo.getId());
