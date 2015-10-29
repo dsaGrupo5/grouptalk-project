@@ -150,6 +150,7 @@ public class RespuestaDAOImpl implements RespuestaDAO{
             UserDAOImpl comprobaruser = new UserDAOImpl();
             User user = comprobaruser.obtener_UserByLoginid(nombreUser);
             if (user == null) throw new UserNoExisteException();
+            connection = Database.getConnection();
             stmt = connection.prepareStatement(RespuestaDAOQuery.OBTENER_COLECCION_RESPUESTAS_APARTIR_USERID);
             stmt.setString(1, user.getId());
             ResultSet rs = stmt.executeQuery();
