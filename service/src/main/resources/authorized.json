@@ -10,5 +10,15 @@
   {
     "path": "grupo/obtenergrupos",
     "methods": ["GET"]
+  },
+
+  {
+    "path": "login",
+    "methods": ["POST"]
+  },
+  {
+    "path": "/",
+    "methods": ["GET"]
   }
+
 ]
