@@ -74,10 +74,9 @@ public class TemaResource {
         if(!id.equals(tema.getId()))
             throw new BadRequestException("path parameter id and entity parameter id doesn't match");
 
-        String temaid = securityContext.getUserPrincipal().getName();
-        if(!temaid.equals(id))
+        String userid = securityContext.getUserPrincipal().getName();
+        if(!userid.equals(tema.getUserid()))
             throw new ForbiddenException("operation not allowed");
-
         temaDAO userDAO = new temaDAOImpl();
         try {
             tema = userDAO.modificar_comentario(tema.getId(),tema.getComentario());
