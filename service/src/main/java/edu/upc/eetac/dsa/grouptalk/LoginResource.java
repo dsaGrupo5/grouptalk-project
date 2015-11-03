@@ -15,12 +15,11 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import java.sql.SQLException;
 
-
 @Path("login")
 public class LoginResource {
-
     @Context
     SecurityContext securityContext;
+    @RolesAllowed({"registrado"})
     @Path(("/login_out"))
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -56,7 +55,4 @@ public class LoginResource {
         }
         return authToken;
     }
-
-    //@RolesAllowed({"registrado"})
-
-}
+  }

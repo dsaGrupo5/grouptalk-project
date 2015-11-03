@@ -15,9 +15,5 @@
   {
     "path": "login/login_in",
     "methods": ["POST"]
-  },
-  {
-    "path": "login/login_out",
-    "methods": ["POST"]
   }
 ]
