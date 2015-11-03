@@ -12,9 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
-/**
- * Created by User on 27/10/2015.
- */
+
 @RolesAllowed({"registrado"})
 @Path("grupo/tema")
 public class TemaResource

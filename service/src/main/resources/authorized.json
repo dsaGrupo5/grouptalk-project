@@ -13,12 +13,11 @@
   },
 
   {
-    "path": "login",
+    "path": "login/login_in",
     "methods": ["POST"]
   },
   {
-    "path": "/",
-    "methods": ["GET"]
+    "path": "login/login_out",
+    "methods": ["POST"]
   }
-
 ]
