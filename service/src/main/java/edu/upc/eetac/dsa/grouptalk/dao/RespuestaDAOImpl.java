@@ -7,10 +7,7 @@ import edu.upc.eetac.dsa.grouptalk.entity.User;
 import edu.upc.eetac.dsa.grouptalk.dao.UserDAOImpl;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class RespuestaDAOImpl implements RespuestaDAO{
@@ -140,7 +137,7 @@ public class RespuestaDAOImpl implements RespuestaDAO{
 
     }
     @Override
-    public RespuestaCollection obtener_respuestas_por_User(String nombreUser) throws SQLException,  UserNoExisteException {
+    public RespuestaCollection obtener_respuestas_por_User(String nombreUser,long timestamp, boolean before) throws SQLException,  UserNoExisteException {
         Respuesta resp = null;
         RespuestaCollection respcol = new RespuestaCollection();
         Connection connection = null;
@@ -149,11 +146,17 @@ public class RespuestaDAOImpl implements RespuestaDAO{
         try {
             UserDAOImpl comprobaruser = new UserDAOImpl();
             User user = comprobaruser.obtener_UserByLoginid(nombreUser);
-            if (user == null) throw new UserNoExisteException();
-            connection = Database.getConnection();
-            stmt = connection.prepareStatement(RespuestaDAOQuery.OBTENER_COLECCION_RESPUESTAS_APARTIR_USERID);
-            stmt.setString(1, user.getId());
+
+            if (user == null) throw new UserNoExisteException(); connection = Database.getConnection();
+
+            if(before) stmt = connection.prepareStatement(RespuestaDAOQuery.OBTENER_COLECCION_RESPUESTAS_APARTIR_USERID_PAGINADA_A_5);
+            else       stmt = connection.prepareStatement(RespuestaDAOQuery.OBTENER_COLECCION_RESPUESTAS_APARTIR_USERID_PAGINADA_A_5_after);
+
+            stmt.setTimestamp(1, new Timestamp(timestamp));
+            stmt.setString(2, user.getId());
+
             ResultSet rs = stmt.executeQuery();
+            boolean first = true;
             while (rs.next())
             {
                 resp = new Respuesta();
@@ -161,13 +164,17 @@ public class RespuestaDAOImpl implements RespuestaDAO{
                 resp.setTemaid(rs.getString("temaid"));
                 resp.setUserid(rs.getString("userid"));
                 resp.setRespuesta(rs.getString("respuesta"));
+                resp.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                resp.setLastModified(rs.getTimestamp("last_modified").getTime());
+                if (first) {
+                    respcol.setNewestTimestamp(resp.getLastModified());
+                    first = false;
+                }
+                respcol.setOldestTimestamp(resp.getLastModified());
                 respcol.getRespuestas().add(resp);
             }
         }
-        catch (SQLException e)
-        {
-            throw e;
-        }
+        catch (SQLException e){throw e;}
         finally
         {
             if (stmt != null) stmt.close();

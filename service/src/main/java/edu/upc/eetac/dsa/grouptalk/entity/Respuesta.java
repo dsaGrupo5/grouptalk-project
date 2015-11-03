@@ -17,6 +17,8 @@ public class Respuesta {
     private String temaid;
     private String userid;
     private String respuesta;
+    private long creationTimestamp;
+    private long lastModified;
 
     public List<Link> getLinks() {
         return links;
@@ -38,23 +40,27 @@ public class Respuesta {
         return temaid;
     }
 
-    public void setTemaid(String temaid) {
-        this.temaid = temaid;
-    }
+    public void setTemaid(String temaid) {this.temaid = temaid;}
 
-    public String getUserid() {
-        return userid;
-    }
+    public String getUserid() {return userid;}
 
     public void setUserid(String userid) {
         this.userid = userid;
     }
-
-    public String getRespuesta() {
-        return respuesta;
-    }
-
+    public String getRespuesta() {return respuesta;}
     public void setRespuesta(String respuesta) {
         this.respuesta = respuesta;
+    }
+    public long getCreationTimestamp() {
+        return creationTimestamp;
+    }
+    public void setCreationTimestamp(long creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+    }
+    public long getLastModified() {
+        return lastModified;
+    }
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
     }
 }

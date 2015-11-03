@@ -45,21 +45,23 @@ public class RespuestaResource {
         catch (RespuestaNoExisteException e) {e.printStackTrace();}
         return Response.ok().build();
     }
-   
-
-
-
     @RolesAllowed({"registrado"})
     @Path(("/obtener_respuestas"))
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(GrouptalkMediaType.GROUPTALK_RESPUESTA)
-    public RespuestaCollection obtenerRespuestas(@FormParam("nombreUser") String nombreUser,@Context UriInfo uriInfo) throws URISyntaxException,UserNoExisteException,SQLException
+    @Produces(GrouptalkMediaType.GROUPTALK_RESPUESTA_COLLECTION)
+    public RespuestaCollection obtenerRespuestas(@FormParam("nombreUser") String nombreUser,@QueryParam("timestamp") long timestamp, @DefaultValue("true") @QueryParam("before") boolean before,@Context UriInfo uriInfo) throws URISyntaxException,UserNoExisteException,SQLException
     {
         if(nombreUser == null )throw new BadRequestException("es necesario rellenar todos los campos");
+
         RespuestaDAO respuestaDAO = new RespuestaDAOImpl();
         RespuestaCollection coleccionrespuestas = null;
-        try{coleccionrespuestas = respuestaDAO.obtener_respuestas_por_User(nombreUser);}
+
+        try
+        {
+            if (before && timestamp == 0) timestamp = System.currentTimeMillis();
+            coleccionrespuestas = respuestaDAO.obtener_respuestas_por_User(nombreUser,timestamp, before);
+        }
         catch(SQLException e){throw new InternalServerErrorException();}
         catch (UserNoExisteException e) {e.printStackTrace();}
         return coleccionrespuestas;

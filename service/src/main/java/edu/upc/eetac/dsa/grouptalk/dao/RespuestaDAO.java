@@ -12,7 +12,7 @@ public interface RespuestaDAO {
     public Respuesta crear_respuesta(String temaid, String userid, String respuesta) throws SQLException,UserNoExisteException, TemaIDNoExisteException;
     public boolean eliminar_respuesta(String id) throws SQLException,RespuestaNoExisteException;
     public Respuesta editar_respuesta(String id, String respuesta) throws SQLException,RespuestaNoExisteException;
-    public RespuestaCollection obtener_respuestas_por_User(String userid) throws SQLException, UserNoExisteException;
+    public RespuestaCollection obtener_respuestas_por_User(String nombreUser,long timestamp, boolean before) throws SQLException, UserNoExisteException;
     public Respuesta obtener_respuesta(String respuestaid) throws SQLException;
 
 
