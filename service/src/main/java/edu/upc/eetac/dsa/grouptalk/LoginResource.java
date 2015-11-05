@@ -17,6 +17,7 @@ import java.sql.SQLException;
 
 @Path("login")
 public class LoginResource {
+
     @Context
     SecurityContext securityContext;
     @RolesAllowed({"registrado"})
@@ -56,3 +57,4 @@ public class LoginResource {
         return authToken;
     }
   }
+//test

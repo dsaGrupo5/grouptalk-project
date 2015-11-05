@@ -46,7 +46,6 @@ public class TemaResource
         return Response.created(uri).type(GrouptalkMediaType.GROUPTALK_TEMA).entity(tema).build();
 
     }
-
     @Path("/{id}")
     @DELETE
     public void eliminarTema(@PathParam("id") String id) throws TemaIDNoExisteException {
@@ -63,8 +62,6 @@ public class TemaResource
             throw new InternalServerErrorException();
         }
     }
-
-
     @RolesAllowed({"registrado"})
     @Path(("/obtenertemas"))
     @POST
@@ -82,7 +79,6 @@ public class TemaResource
 
         return colecciontemas;
     }
-
     @RolesAllowed({"registrado"})
     @Path("/{id}")
     @PUT
