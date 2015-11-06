@@ -20,56 +20,23 @@ $("#login").click(function(e) {
 	else
 	{
 	var log = new Object();
-	login.username = $("#login_username").val();
-	login.password = $("#login_password").val();	
-	getlogin(login);
+	var loginid = $("#login_username").val();
+	var password = $("#login_password").val();	
+	getlogin(loginid, password);
 	}
 });
 
-function getlogin(login)
+function getlogin(loginid, password)
 { 	
-	var url = API_BASE_URL + '/login/login_in';	
-    var data = JSON.stringify(login);	
-	$.ajax({
-		url : url,
-		type : 'POST',
-		crossDomain : true,
-		dataType : 'json',
-		contentType : 'application/vnd.dsa.grouptalk.auth-token+json',
-		data : data,
-	}).done(function(data, status, jqxhr){}).fail( function( jqXHR, textStatus, errorThrown ) {
-
-        if (jqXHR.status === 0) {
-    
-            alert('Not connect: Verify Network.');
-
-        } else if (jqXHR.status == 404) {
-
-            alert('Requested page not found [404]');
-
-        } else if (jqXHR.status == 500) {
-
-            alert('Internal Server Error [500].');
-
-        } else if (textStatus === 'parsererror') {
-
-            alert('Requested JSON parse failed.');
-
-        } else if (textStatus === 'timeout') {
-
-            alert('Time out error.');
-
-        } else if (textStatus === 'abort') {
-
-            alert('Ajax request aborted.');
-
-        } else {
-
-            alert('Uncaught Error: ' + jqXHR.responseText);
-
-        }
-
-    });
+	var url = API_BASE_URL + '/login/login_in';		
+	alert(url);
+	$.post( url,{login: loginid,password : password})
+		.done(function(data, status, jqxhr)
+		{ alert('todo ok');
+		})
+		.fail( function( jqXHR, textStatus, errorThrown )
+		{ 
+		});
 
 }
 	
