@@ -33,7 +33,17 @@ function getlogin(loginid, password)
 { 	
 	var url = API_BASE_URL + '/login/login_in';		
 	$.post( url,{login: loginid,password : password})
-		.done(function(data, status, jqxhr){if(data.role== 'registrado'){alert('reg ok');}})
+		.done(function(data, status, jqxhr)
+		{
+			if(data.role== 'registrado')
+			{
+			    document.location.href = "file:///C:/Users/carlos/dsa-projects/grouptalk-project/www/registered.html" ;
+			}
+			if(data.role== 'administrador')
+			{
+				document.location.href = "file:///C:/Users/carlos/dsa-projects/grouptalk-project/www/admin.html" ;
+			}
+		})
 	    .fail( function( jqXHR, textStatus, errorThrown )
 		{ 
 		//CAMBIAR EL COLOR
