@@ -1,6 +1,9 @@
 var API_BASE_URL = "http://127.0.0.1:8080/grouptalk";
+var USERNAME = "";
+var PASSWORD = "";
 
-
+$(document).ready(function() {
+});
 
 $("#login").click(function(e) {
 	e.preventDefault();
@@ -29,13 +32,14 @@ $("#login").click(function(e) {
 function getlogin(loginid, password)
 { 	
 	var url = API_BASE_URL + '/login/login_in';		
-	alert(url);
 	$.post( url,{login: loginid,password : password})
-		.done(function(data, status, jqxhr)
-		{ alert('todo ok');
-		})
-		.fail( function( jqXHR, textStatus, errorThrown )
+		.done(function(data, status, jqxhr){if(data.role== 'registrado'){alert('reg ok');}})
+	    .fail( function( jqXHR, textStatus, errorThrown )
 		{ 
+		//CAMBIAR EL COLOR
+			document.getElementById('login_username').style.background='#F6B5B5';
+			document.getElementById('login_username').value=null;
+			$('#login_username').attr('placeholder','USUARIO NO REGISTRADO');
 		});
 
 }
