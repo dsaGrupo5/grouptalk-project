@@ -14,11 +14,10 @@ import java.util.List;
 public class GrouptalkRootAPI {
     @InjectLinks({
             @InjectLink(resource = GrouptalkRootAPIResource.class, style = InjectLink.Style.ABSOLUTE, rel = "self bookmark home", title = "Grouptalk Root API"),
-            @InjectLink(resource = LoginResource.class, style = InjectLink.Style.ABSOLUTE, rel = "login", title = "Login",  type= GrouptalkMediaType.GROUPTALK_AUTH_TOKEN),
-            @InjectLink(resource = GroupResource.class, style = InjectLink.Style.ABSOLUTE, rel = "current-stings", title = "Current stings", type= GrouptalkMediaType.GROUPTALK_GRUPO_COLLECTION),
-            @InjectLink(resource = UserResource.class, style = InjectLink.Style.ABSOLUTE, rel = "create-user", title = "Register", type= GrouptalkMediaType.GROUPTALK_AUTH_TOKEN),
-            @InjectLink(resource = LoginResource.class, style = InjectLink.Style.ABSOLUTE, rel = "logout", title = "Logout", condition="${!empty resource.userid}"),
-            @InjectLink(resource = UserResource.class, method="getUser", style = InjectLink.Style.ABSOLUTE, rel = "user-profile", title = "User profile", condition="${!empty resource.userid}", type= GrouptalkMediaType.GROUPTALK_USER, bindings = @Binding(name = "id", value = "${resource.userid}"))
+            @InjectLink(resource = UserResource.class, style = InjectLink.Style.ABSOLUTE, rel = "registro-usuario", title = "Registro usuario", type= GrouptalkMediaType.GROUPTALK_AUTH_TOKEN),
+            @InjectLink(resource = GroupResource.class,method="obtenerGrupo", style = InjectLink.Style.ABSOLUTE, rel = "Obtener-grupos", title = "Obtener-grupos", type= GrouptalkMediaType.GROUPTALK_GRUPO_COLLECTION),
+            @InjectLink(resource = LoginResource.class,method="login", style = InjectLink.Style.ABSOLUTE, rel = "Logo-in", title = "Logo in", type= GrouptalkMediaType.GROUPTALK_AUTH_TOKEN),
+
     })
     private List<Link> links;
 

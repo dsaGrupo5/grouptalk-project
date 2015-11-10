@@ -12,9 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
-/**
- * Created by User on 27/10/2015.
- */
+
 @RolesAllowed({"registrado"})
 @Path("grupo/tema")
 public class TemaResource
@@ -48,7 +46,6 @@ public class TemaResource
         return Response.created(uri).type(GrouptalkMediaType.GROUPTALK_TEMA).entity(tema).build();
 
     }
-
     @Path("/{id}")
     @DELETE
     public void eliminarTema(@PathParam("id") String id) throws TemaIDNoExisteException {
@@ -65,8 +62,6 @@ public class TemaResource
             throw new InternalServerErrorException();
         }
     }
-
-
     @RolesAllowed({"registrado"})
     @Path(("/obtenertemas"))
     @POST
@@ -84,7 +79,6 @@ public class TemaResource
 
         return colecciontemas;
     }
-
     @RolesAllowed({"registrado"})
     @Path("/{id}")
     @PUT

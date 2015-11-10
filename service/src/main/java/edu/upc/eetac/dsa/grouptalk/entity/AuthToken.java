@@ -1,9 +1,16 @@
 package edu.upc.eetac.dsa.grouptalk.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import edu.upc.eetac.dsa.grouptalk.GrouptalkMediaType;
+import edu.upc.eetac.dsa.grouptalk.GrouptalkRootAPIResource;
+import edu.upc.eetac.dsa.grouptalk.LoginResource;
+import edu.upc.eetac.dsa.grouptalk.UserResource;
+import org.glassfish.jersey.linking.Binding;
+import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
 import javax.ws.rs.core.Link;
+import java.security.acl.Group;
 import java.util.List;
 
 /**
@@ -13,9 +20,11 @@ import java.util.List;
 public class AuthToken {
     @InjectLinks({})
     private List<Link> links;
-
     private String userid;
     private String token;
+    private String role;
+
+
 
     public List<Link> getLinks() {
         return links;
@@ -33,11 +42,10 @@ public class AuthToken {
         this.userid = userid;
     }
 
-    public String getToken() {
-        return token;
-    }
+    public String getToken() {return token;}
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+    public void setToken(String token) {this.token = token; }
+    public String getRole() {return role;}
+    public void setRole(String role) {this.role = role;}
+
 }

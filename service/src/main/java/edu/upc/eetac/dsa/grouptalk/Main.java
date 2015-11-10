@@ -13,7 +13,8 @@ import java.util.ResourceBundle;
  * Main class.
  *
  */
-public class Main {
+public class Main
+{
     // Base URI the Grizzly HTTP server will listen on
     private static String baseURI;
 
@@ -51,7 +52,5 @@ public class Main {
         }
         return baseURI;
     }
-
-
-}
+    }
 

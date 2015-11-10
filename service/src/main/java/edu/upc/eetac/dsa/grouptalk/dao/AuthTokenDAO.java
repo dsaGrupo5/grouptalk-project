@@ -11,5 +11,7 @@ import java.sql.SQLException;
 public interface AuthTokenDAO {
     public UserInfo getUserByAuthToken(String token) throws SQLException;
     public AuthToken createAuthToken(String userid) throws SQLException;
-    public void deleteToken(String userid) throws  SQLException;
+    public void deleteToken(String nombreUser) throws  SQLException;
+
+
 }

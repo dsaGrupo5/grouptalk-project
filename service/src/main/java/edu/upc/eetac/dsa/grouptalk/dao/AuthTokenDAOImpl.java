@@ -2,16 +2,15 @@ package edu.upc.eetac.dsa.grouptalk.dao;
 
 import edu.upc.eetac.dsa.grouptalk.auth.UserInfo;
 import edu.upc.eetac.dsa.grouptalk.entity.AuthToken;
+import edu.upc.eetac.dsa.grouptalk.entity.Grupo;
 import edu.upc.eetac.dsa.grouptalk.entity.Role;
+import edu.upc.eetac.dsa.grouptalk.entity.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Created by carlos on 21/10/2015.
- */
 public class AuthTokenDAOImpl implements AuthTokenDAO {
     @Override
     public UserInfo getUserByAuthToken(String token) throws SQLException {
@@ -53,27 +52,40 @@ public class AuthTokenDAOImpl implements AuthTokenDAO {
         Connection connection = null;
         PreparedStatement stmt = null;
         String token = null;
-        AuthToken authToken = null;
+        String role = null;
+        AuthToken authToken = new AuthToken();
         try {
             connection = Database.getConnection();
 
             stmt = connection.prepareStatement(AuthTokenDAOQuery.UUID);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next())
-                token = rs.getString(1);
-            else
-                throw new SQLException();
+            if (rs.next()) token = rs.getString(1);
+            else throw new SQLException();
 
-            stmt.close();
+
+
             stmt = connection.prepareStatement(AuthTokenDAOQuery.CREATE_TOKEN);
             stmt.setString(1, userid);
             stmt.setString(2, token);
-
             stmt.executeUpdate();
 
-            authToken = new AuthToken();
+
+
+            stmt = connection.prepareStatement(AuthTokenDAOQuery.GET_ROLES_OF_USER);
+            stmt.setString(1, userid);
+            rs = stmt.executeQuery();
+            while (rs.next())
+            {
+                authToken.setRole(rs.getString("role"));
+            }
+
+
+
+
             authToken.setToken(token);
             authToken.setUserid(userid);
+
+
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -83,15 +95,17 @@ public class AuthTokenDAOImpl implements AuthTokenDAO {
         return authToken;
     }
     @Override
-    public void deleteToken(String userid) throws SQLException {
+    public void deleteToken(String nombreUser) throws SQLException {
         Connection connection = null;
         PreparedStatement stmt = null;
         AuthToken authToken = null;
+        UserDAOImpl compuser = new UserDAOImpl();
+        User user = compuser.obtener_UserByLoginid(nombreUser);
         try {
             connection = Database.getConnection();
 
             stmt = connection.prepareStatement(AuthTokenDAOQuery.DELETE_TOKEN);
-            stmt.setString(1, userid);
+            stmt.setString(1, user.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -101,4 +115,5 @@ public class AuthTokenDAOImpl implements AuthTokenDAO {
             if (connection != null) connection.close();
         }
     }
+
 }
