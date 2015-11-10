@@ -67,7 +67,7 @@ function getlogin(login, password)
 { 	
 	var url = API_BASE_URL + '/login/login_in';		
 	$.post( url,{login: login,password : password})
-		.done(function(data, status, jqxhr)
+	.done(function(data, status, jqxhr)
 		{
 			if(data.role== 'registrado')
 			{
