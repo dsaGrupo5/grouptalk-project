@@ -22,26 +22,65 @@ $("#login").click(function(e) {
 	}
 	else
 	{
-	var log = new Object();
-	var loginid = $("#login_username").val();
+	var login = $("#login_username").val();
 	var password = $("#login_password").val();	
-	getlogin(loginid, password);
+	getlogin(login, password);
 	}
 });
 
-function getlogin(loginid, password)
+$("#sign").click(function(e) {
+	e.preventDefault();
+	if($("#new_usuario_nombre").val() == "" || $("#new_usuario_username").val() == "" || $("#new_usuario_password").val() == "" || $("#new_usuario_email").val() == "")
+	{
+		if($("#new_usuario_nombre").val() == "")
+		{
+			document.getElementById('new_usuario_nombre').style.background='#F6B5B5';
+			$('#new_usuario_nombre').attr('placeholder','RELLENE EL CAMPO');
+		}
+		if($("#new_usuario_username").val() == "")
+		{
+			document.getElementById('new_usuario_username').style.background='#F6B5B5';
+			$('#new_usuario_username').attr('placeholder','RELLENE EL CAMPO');
+		}
+		if($("#new_usuario_password").val() == "")
+		{
+			document.getElementById('new_usuario_password').style.background='#F6B5B5';
+			$('#new_usuario_password').attr('placeholder','RELLENE EL CAMPO');
+		}
+		if($("#new_usuario_email").val() == "")
+		{
+			document.getElementById('new_usuario_email').style.background='#F6B5B5';
+			$('#new_usuario_email').attr('placeholder','RELLENE EL CAMPO');
+		}
+	}
+	else
+	{
+	
+	var login = $("#new_usuario_login").val();
+	var password = $("#new_usuario_password").val();
+	var email = $("#new_usuario_Email").val();	
+	var fullname = $("#new_usuario_fullname").val();		
+	registrar_usuario(login, password, email , fullname);
+	}
+});
+function getlogin(login, password)
 { 	
 	var url = API_BASE_URL + '/login/login_in';		
-	$.post( url,{login: loginid,password : password})
+	$.post( url,{login: login,password : password})
 		.done(function(data, status, jqxhr)
 		{
 			if(data.role== 'registrado')
 			{
-			    document.location.href = "file:///C:/Users/carlos/dsa-projects/grouptalk-project/www/registered.html" ;
+				
+				$.cookie('login', login);
+				$.cookie('userid', data.userid);
+				$.cookie('token', data.token);
+				
+			    window.location = "http://localhost/registered.html" ;
 			}
 			if(data.role== 'administrador')
 			{
-				document.location.href = "file:///C:/Users/carlos/dsa-projects/grouptalk-project/www/admin.html" ;
+				window.location = "http://localhost/admin.html" ;
 			}
 		})
 	    .fail( function( jqXHR, textStatus, errorThrown )
@@ -54,3 +93,18 @@ function getlogin(loginid, password)
 
 }
 	
+function registrar_usuario(login, password, email , fullname){
+var url = API_BASE_URL + '/users';
+
+	$.post(url,{loginid: login,password : password, email:email, fullname:fullname})
+	.done(function(data, status, jqxhr){
+		getlogin(login, password);
+	})
+	.fail(function() 
+	{
+		document.getElementById('new_usuario_login').style.background='#6600FF';
+		document.getElementById('new_usuario_login').value=null;
+		$('#new_usuario_login').attr('placeholder','YA EXISTE ESTE USERNAME');
+		
+	});
+}

@@ -61,16 +61,16 @@ public class AuthTokenDAOImpl implements AuthTokenDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) token = rs.getString(1);
             else throw new SQLException();
-
+            stmt.close();
 
 
             stmt = connection.prepareStatement(AuthTokenDAOQuery.CREATE_TOKEN);
             stmt.setString(1, userid);
             stmt.setString(2, token);
             stmt.executeUpdate();
+            stmt.close();
 
-
-
+           
             stmt = connection.prepareStatement(AuthTokenDAOQuery.GET_ROLES_OF_USER);
             stmt.setString(1, userid);
             rs = stmt.executeQuery();
@@ -84,6 +84,7 @@ public class AuthTokenDAOImpl implements AuthTokenDAO {
 
             authToken.setToken(token);
             authToken.setUserid(userid);
+            stmt.close();
 
 
         } catch (SQLException e) {
