@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created cfgdfgby User on 20/10/2015.
+ * Created cfgdfgby User on 20gfdgdfg/10/2015.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RespuestaCollection {
