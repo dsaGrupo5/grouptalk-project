@@ -1,15 +1,14 @@
 package edu.upc.eetac.dsa.grouptalk.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-<<<<<<< HEAD
-=======
+
 import edu.upc.eetac.dsa.grouptalk.GrouptalkMediaType;
 import edu.upc.eetac.dsa.grouptalk.GrouptalkRootAPIResource;
 import edu.upc.eetac.dsa.grouptalk.RespuestaResource;
 import org.glassfish.jersey.linking.Binding;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
->>>>>>> f14a7070751abe8443907d211fe484b53d8b0c30
+
 
 import javax.ws.rs.core.Link;
 import java.util.ArrayList;
@@ -20,8 +19,7 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RespuestaCollection {
-<<<<<<< HEAD
-=======
+
 
     @InjectLinks({
             @InjectLink(resource = GrouptalkRootAPIResource.class, style = InjectLink.Style.ABSOLUTE, rel = "home", title = "Grouptalk Root API"),
@@ -29,7 +27,7 @@ public class RespuestaCollection {
             @InjectLink(resource = RespuestaResource.class, method = "getRespuestas", style = InjectLink.Style.ABSOLUTE, rel = "next", title = "Nuevas Respuestas", type= GrouptalkMediaType.GROUPTALK_RESPUESTA_COLLECTION, bindings = {@Binding(name = "timestamp", value = "${instance.newestTimestamp}"), @Binding(name = "before", value = "false")}),
             @InjectLink(resource = RespuestaResource.class, method = "getRespuestas", style = InjectLink.Style.ABSOLUTE, rel = "previous", title = "Older stings", type= GrouptalkMediaType.GROUPTALK_RESPUESTA_COLLECTION, bindings = {@Binding(name = "timestamp", value = "${instance.oldestTimestamp}"), @Binding(name = "before", value = "true")}),
     })
->>>>>>> f14a7070751abe8443907d211fe484b53d8b0c30
+
     private List<Link> links;
     private long newestTimestamp;
     private long oldestTimestamp;
