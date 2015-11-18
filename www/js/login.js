@@ -66,12 +66,8 @@ $("#sign").click(function(e) {
 function getlogin(login, password)
 { 	
 	var url = API_BASE_URL + '/login/login_in';		
-	$.post( url,{login: login,password : password})
-<<<<<<< HEAD
-		.done(function(data, status, jqxhr)
-=======
-	.done(function(data, status, jqxhr)
->>>>>>> f14a7070751abe8443907d211fe484b53d8b0c30
+	$.post( url,{login: login,password : password}).done(function(data, status, jqxhr)
+
 		{
 			if(data.role== 'registrado')
 			{
@@ -84,6 +80,9 @@ function getlogin(login, password)
 			}
 			if(data.role== 'administrador')
 			{
+				$.cookie('login', login);
+				$.cookie('userid', data.userid);
+				$.cookie('token', data.token);
 				window.location = "http://localhost/admin.html" ;
 			}
 		})

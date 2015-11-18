@@ -2,11 +2,23 @@
 <html lang="en">
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <title>GitHub Example</title>
+    <title>Grouptalk Example</title>
   </head>
+    <h1>Página Administrador</h1>
   <body>
-    <h1>Pagina administrador</h1>
-	
- 
+    <div class="row">
+      <h3 class="panel-title">Crear nuevo grupo</h3>
+		  <span class="input-group-addon">Nombre grupo</span> 
+			<input class="form-control" id="nombre_grupo"type="text">		  
+			<button type="button" class="btn btn-info" id="button_to_create">Crear Grupo</button>
+			<span id="resultado"></span>
+    </div>
+    
+    <!-- jQuery -->
+     <script src="js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.cookie.js"></script>
+	<script src="js/admin.js"></script>
   </body>
 </html>
