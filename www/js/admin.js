@@ -37,7 +37,7 @@ function crearGrupo(grupo) {
 	
 	$.ajax({
 		url : url,
-		type : 'POST',
+		type : 'DELETED',
 		data : $.param(grupo),
 		headers: {"X-Auth-Token":TOKEN}
 	}).done(function(data, status, jqxhr) {
