@@ -118,4 +118,21 @@ public class GroupResource {
         }
         return colecciongrupos;
     }
+
+    @Path("/eliminar")
+    @DELETE
+    public void eliminarTema(@FormParam("nombregrupo") String nombre) throws GrupoNoExisteException {
+
+        String grupoid = securityContext.getUserPrincipal().getName();
+        temaDAO temadao = new temaDAOImpl();
+        try {
+            String idusercreador = temadao.obtener_tema_por_id(id).getUserid();
+            if(!temaid.equals(idusercreador))
+                throw new ForbiddenException("este usuario no ha creado este tema!");
+            if(!temadao.eliminar_tema(id))
+                throw new TemaIDNoExisteException();
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+    }
 }
