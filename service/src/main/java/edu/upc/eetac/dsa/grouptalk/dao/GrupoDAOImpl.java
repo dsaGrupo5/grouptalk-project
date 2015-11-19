@@ -242,4 +242,8 @@ public class GrupoDAOImpl implements GrupoDAO{
 
 
     }
+
+    public boolean editar_grupo (String nombregrupo,String nombrenuevo) throws GrupoNoExisteException, SQLException{
+        return true;
+    }
 }

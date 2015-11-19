@@ -18,4 +18,5 @@ public interface GrupoDAO {
     public Grupo obtener_ID_grupo_por_NOMBRE(String nombre)throws SQLException;
     public Grupo comprobarUsuarioengrupo(String grupoid, String userid)throws RelacionNoExisteException, SQLException;
     public boolean eliminar_grupo (String nombregrupo) throws GrupoNoExisteException, SQLException;
+    public boolean editar_grupo (String nombregrupo,String nombrenuevo) throws GrupoNoExisteException, SQLException;
 }

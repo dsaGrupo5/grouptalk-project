@@ -11,15 +11,28 @@
 		  <span class="input-group-addon">Nombre grupo</span> 
 			<input class="form-control" id="nombre_grupo_crear"type="text">		  
 			<button type="button" class="btn btn-info" id="button_crear_grupo">Crear Grupo</button>
+			<div class="row">
+				<span id="resultado"></span>
+			</div>
 			
 			
 		<h3 class="panel-title">Eliminar Grupo</h3>
 		    <span class="input-group-addon">Nombre grupo</span> 
 			<input class="form-control" id="nombre_grupo_eliminar"type="text">		  
 			<button type="button" class="btn btn-info" id="button_eliminar_grupo">Eliminar Grupo</button>
-	<div class="row">
-			<span id="resultado"></span>
-    </div>
+			<div class="row">
+				<span id="resultado_elim"></span>
+			</div>
+		<h3 class="panel-title">Editar Nombre de Grupo</h3>
+		    <span class="input-group-addon">Nombre grupo a editar</span> 
+			<input class="form-control" id="nombre_grupo_editar"type="text">
+			<span class="input-group-addon">Introducir nombre nuevo</span> 
+			<input class="form-control" id="nombre_nuevo_a_asignar"type="text">
+			<button type="button" class="btn btn-info" id="button_obtener_grupo_edit">Editar Grupo</button>
+			<button type="button" class="btn btn-info" id="button_editar_grupo">Guardar</button>
+			<div class="row">
+				<span id="resultado_edit"></span>
+			</div>
     
 	
     <!-- jQuery -->

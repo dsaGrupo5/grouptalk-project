@@ -126,7 +126,25 @@ public class GroupResource {
 
         GrupoDAO grupoDAO = new GrupoDAOImpl();
 
-        Grupo grupo = null;
+        try{
+            if(!grupoDAO.eliminar_grupo(nombregrupo))
+                throw new GrupoNoExisteException();
+        }catch (GrupoNoExisteException e){
+
+        }catch(SQLException e){
+            throw new InternalServerErrorException();
+        }
+        return Response.ok().build();
+    }
+
+    @RolesAllowed({"administrador"})
+    @Path("/editar/{id}")
+    @PUT
+    @Consumes(GrouptalkMediaType.GROUPTALK_GRUPO)
+    @Produces(GrouptalkMediaType.GROUPTALK_GRUPO)
+    public Response editarGrupo(@PathParam("id") String nombregrupo,@FormParam("nombregrupo") String nombrenuevo ) throws GrupoNoExisteException {
+
+        GrupoDAO grupoDAO = new GrupoDAOImpl();
 
         try{
             if(!grupoDAO.eliminar_grupo(nombregrupo))
