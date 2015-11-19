@@ -11,14 +11,21 @@ $(document).ready(function() {
 
 
 
-$("#button_to_create").click(function(e) {
+$("#button_crear_grupo").click(function(e) {
 	e.preventDefault();
 	var nuevoGrupo	= new Object();
-	nuevoGrupo.nombre = $("#nombre_grupo").val();
+	nuevoGrupo.nombre = $("#nombre_grupo_crear").val();
 	crearGrupo(nuevoGrupo);
 	
 });
 
+$("#button_eliminar_grupo").click(function(e) {
+	e.preventDefault();
+	var nuevoGrupo	= new Object();
+	nuevoGrupo.nombre = $("#nombre_grupo_eliminar").val();
+	eliminarGrupo(nuevoGrupo);
+	
+});
 
 
 function crearGrupo(grupo) {
@@ -39,7 +46,23 @@ function crearGrupo(grupo) {
 		$('<div class="alert alert-danger"> <strong>Este grupo ya existe</strong>').appendTo($("#resultado"));
 	});
 
+}
+function eliminarGrupo(grupo) {
+	var url = API_BASE_URL + '/grupo/eliminar';
+	alert(grupo.nombre);
+	var data = JSON.stringify(grupo);
+	console.log(data);
+	console.log(grupo);	
 	
+	$.ajax({
+		url : url,
+		type : 'POST',
+		data : $.param(grupo),
+		headers: {"X-Auth-Token":TOKEN}
+	}).done(function(data, status, jqxhr) {
+		 $('<div class="alert alert-danger"> <strong>Grupo eliminado correctamente</strong>').appendTo($("#resultado"));			
+  	}).fail(function() {
+		$('<div class="alert alert-danger"> <strong>Este grupo no existe</strong>').appendTo($("#resultado"));
+	});
 
 }
-
