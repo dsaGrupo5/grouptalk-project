@@ -30,14 +30,13 @@ $("#button_eliminar_grupo").click(function(e) {
 
 function crearGrupo(grupo) {
 	var url = API_BASE_URL + '/grupo';
-	alert(grupo.nombre);
 	var data = JSON.stringify(grupo);
 	console.log(data);
 	console.log(grupo);	
 	
 	$.ajax({
 		url : url,
-		type : 'DELETED',
+		type : 'POST',
 		data : $.param(grupo),
 		headers: {"X-Auth-Token":TOKEN}
 	}).done(function(data, status, jqxhr) {
@@ -48,16 +47,11 @@ function crearGrupo(grupo) {
 
 }
 function eliminarGrupo(grupo) {
-	var url = API_BASE_URL + '/grupo/eliminar';
-	alert(grupo.nombre);
-	var data = JSON.stringify(grupo);
-	console.log(data);
-	console.log(grupo);	
-	
+	var url = API_BASE_URL + '/grupo/eliminar/'+ grupo.nombre;
+	console.log(url);	
 	$.ajax({
 		url : url,
-		type : 'POST',
-		data : $.param(grupo),
+		type : 'DELETE',
 		headers: {"X-Auth-Token":TOKEN}
 	}).done(function(data, status, jqxhr) {
 		 $('<div class="alert alert-danger"> <strong>Grupo eliminado correctamente</strong>').appendTo($("#resultado"));			
