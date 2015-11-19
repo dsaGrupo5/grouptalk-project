@@ -212,4 +212,34 @@ public class GrupoDAOImpl implements GrupoDAO{
         }
         return grupo;
     }
+
+    @Override
+    public boolean eliminar_grupo (String nombregrupo) throws GrupoNoExisteException, SQLException{
+        Connection connection = null;
+        PreparedStatement stmt = null;
+
+        try {
+            Grupo grupo = obtener_ID_grupo_por_NOMBRE(nombregrupo);
+
+                if (grupo == null)throw new GrupoNoExisteException();
+
+            connection = Database.getConnection();
+            stmt = connection.prepareStatement(GrupoDAOQuery.ELIMINAR_GRUPO);
+            stmt.setString(1, nombregrupo);
+            stmt.executeUpdate();
+            return true ;
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
+
+
+
+
+    }
 }

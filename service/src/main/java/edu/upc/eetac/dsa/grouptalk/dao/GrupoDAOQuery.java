@@ -12,4 +12,5 @@ public interface GrupoDAOQuery {
     public final static String OBTENER_NOMBRE_POR_ID = "select  hex(g.id) as id, g.nombre from grupo g where id=unhex(?)";
     public final static String OBTENER_ID_GRUPO_POR_NOMBRE = "select  hex(g.id) as id, g.nombre from grupo g where g.nombre=?";
     public final static String COMPROBAR_USER_ASIGNADO_A_GRUPO = "select hex(g.grupoid) as grupoid from relaciones_grupo g where grupoid=unhex(?) and userid=unhex(?)";
+    public final static String ELIMINAR_GRUPO = "delete from grupo where nombre=(?)";
 }
