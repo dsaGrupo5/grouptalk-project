@@ -53,7 +53,7 @@ $("#button_obtener_grupos").click(function(e)
 $("#button_obtener_grupos_paginados").click(function(e)
 {
 	e.preventDefault();
-	
+	getPagination();
 });
 
 function crearGrupo(grupo) 
@@ -141,7 +141,8 @@ function obtenerColccionGrupos()
 		type : 'GET',	
 		crossDomain : true,	
 		dataType : 'json',
-		contentType : 'application/vnd.dsa.grouptalk.grupo.collection+json',})
+		contentType : 'application/vnd.dsa.grouptalk.grupo.collection+json',
+		})
 	.success(function(data, status, jqxhr)
 	{
 		console.log(data);
@@ -154,4 +155,67 @@ function obtenerColccionGrupos()
 		})
 	})
 	.fail(function(){$("#result").text("No files.");});
+}
+function getPagination(url) {
+	$("#repos_result").text('');
+	var url = API_BASE_URL + '/grupo/obtenergrupos';
+	$.ajax({
+		url : url,
+		type : 'GET',	
+		crossDomain : true,	
+		dataType : 'json',
+		contentType : 'application/vnd.dsa.grouptalk.grupo.collection+json',
+	}).done(function(data, status, jqxhr) {
+        	var response = data.grupos;
+		var grupoCollection = new GrupoCollection(response);
+                var linkHeader = jqxhr.getResponseHeader('Link');
+                grupoCollection.buildLinks(linkHeader);
+				console.log(linkHeader);
+
+		var html = grupoCollection.toHTML();
+		$("#repos_result").html(html);
+
+	}).fail(function(jqXHR, textStatus) {
+		console.log(textStatus);
+	});
+
+}
+function GrupoCollection(grupoCollection){
+	this.grupos = grupoCollection;
+        var href = {};
+
+	var instance = this;
+
+	this.buildLinks = function(header){
+		this.links = weblinking.parseHeader(header);
+	}
+
+	this.getLink = function(rel){
+                return this.links.getLinkValuesByRel(rel);
+	}
+
+	this.toHTML = function(){
+		var html = '';
+		$.each(this.grupos, function(i, v) {
+			var grupo = v;
+			console.log(grupo);
+			html = html.concat('<br><strong> Id: ' + grupo.id + '</strong><br>');
+            html = html.concat('<br><strong> Nombre: ' + grupo.nombre + '</strong><br>');
+		});
+		
+		html = html.concat(' <br> ');
+
+                var prev = this.getLink('prev');
+		if (prev.length == 1) {
+			console.log(prev[0].href);
+			html = html.concat(' <a onClick="getPagination(\'' + prev[0].href + '\');" style="cursor: pointer; cursor: hand;">[Prev]</a> ');
+		}
+                var next = this.getLink('next');
+		if (next.length == 1) {
+			html = html.concat(' <a onClick="getPagination(\'' + next[0].href + '\');" style="cursor: pointer; cursor: hand;">[Next]</a> ');
+		}
+
+ 		return html;	
+	}
+
 }
