@@ -15,6 +15,8 @@ CREATE TABLE grupo (
     id BINARY(16) NOT NULL,
     nombre VARCHAR(15) NOT NULL,
     PRIMARY KEY (id)
+    last_modified TIMESTAMP NOT NULL,
+    creation_timestamp DATETIME not null default current_timestamp
 );
 CREATE TABLE tema (
     id BINARY(16) NOT NULL,

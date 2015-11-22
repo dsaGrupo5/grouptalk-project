@@ -12,9 +12,6 @@ import javax.ws.rs.core.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-
-
-
 @Path("grupo")
 public class GroupResource {
     @Context
@@ -99,18 +96,17 @@ public class GroupResource {
         return Response.ok().build();
 
     }
-
     @Path(("/obtenergrupos"))
     @GET
     @Produces(GrouptalkMediaType.GROUPTALK_GRUPO_COLLECTION)
-    public GrupoCollection obtenerGrupo() throws URISyntaxException, SQLException
+    public GrupoCollection obtenerGrupos(@QueryParam("timestamp") long timestamp, @DefaultValue("true") @QueryParam("before") boolean before) throws URISyntaxException, SQLException
     {
         GrupoDAO grupoDAO = new GrupoDAOImpl();
-        GrupoCollection colecciongrupos = new GrupoCollection();
+        GrupoCollection colecciongrupos = null ;
         try
         {
-            colecciongrupos = grupoDAO.obtener_coleccion();
-
+            if (before && timestamp == 0) timestamp = System.currentTimeMillis();
+            colecciongrupos = grupoDAO.obtener_coleccion(timestamp, before);
         }
         catch(SQLException e)
         {
@@ -118,11 +114,11 @@ public class GroupResource {
         }
         return colecciongrupos;
     }
-
     @RolesAllowed({"administrador"})
     @Path("/eliminar/{nombre}")
     @DELETE
-    public Response eliminarGrupo(@PathParam("nombre") String nombregrupo) throws GrupoNoExisteException {
+    public Response eliminarGrupo(@PathParam("nombre") String nombregrupo) throws GrupoNoExisteException
+    {
 
         GrupoDAO grupoDAO = new GrupoDAOImpl();
 
@@ -136,24 +132,45 @@ public class GroupResource {
         }
         return Response.ok().build();
     }
-
     @RolesAllowed({"administrador"})
-    @Path("/editar/{id}")
-    @PUT
-    @Consumes(GrouptalkMediaType.GROUPTALK_GRUPO)
+      @Path("/editar")
+      @PUT
+      @Consumes(GrouptalkMediaType.GROUPTALK_GRUPO)
+      @Produces(GrouptalkMediaType.GROUPTALK_GRUPO)
+    public Grupo editarGrupo(Grupo grupo) throws GrupoNoExisteException
+    {
+
+    GrupoDAO grupoDAO = new GrupoDAOImpl();
+    Grupo nuevoGrupo = new Grupo();
+
+    try{nuevoGrupo = grupoDAO.editar_grupo(grupo);}
+
+    catch (GrupoNoExisteException e){}
+    catch(SQLException e){throw new InternalServerErrorException();}
+
+    return nuevoGrupo;
+}
+    @RolesAllowed({"administrador"})
+    @Path("/obtener_grupo")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(GrouptalkMediaType.GROUPTALK_GRUPO)
-    public Response editarGrupo(@PathParam("id") String nombregrupo,@FormParam("nombregrupo") String nombrenuevo ) throws GrupoNoExisteException {
+    public Grupo obtenerGrupo(@FormParam("nombre") String nombre ) throws GrupoNoExisteException
+    {
 
         GrupoDAO grupoDAO = new GrupoDAOImpl();
+        Grupo grupo = new Grupo();
 
         try{
-            if(!grupoDAO.eliminar_grupo(nombregrupo))
+            grupo =grupoDAO.obtener_ID_grupo_por_NOMBRE(nombre);
+            if(grupo == null)
                 throw new GrupoNoExisteException();
         }catch (GrupoNoExisteException e){
 
         }catch(SQLException e){
             throw new InternalServerErrorException();
         }
-        return Response.ok().build();
+        return grupo;
     }
 }
+

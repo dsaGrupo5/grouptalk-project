@@ -4,10 +4,7 @@ import edu.upc.eetac.dsa.grouptalk.entity.Grupo;
 import edu.upc.eetac.dsa.grouptalk.entity.GrupoCollection;
 import edu.upc.eetac.dsa.grouptalk.entity.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class GrupoDAOImpl implements GrupoDAO{
@@ -102,30 +99,41 @@ public class GrupoDAOImpl implements GrupoDAO{
 
     }
     @Override
-    public GrupoCollection obtener_coleccion()throws SQLException{
+    public GrupoCollection obtener_coleccion(long timestamp, boolean before)throws SQLException{
         Grupo grup = null;
         GrupoCollection grupocollection = new GrupoCollection();
         Connection connection = null;
         PreparedStatement stmt = null;
         try {
             connection = Database.getConnection();
-            stmt = connection.prepareStatement(GrupoDAOQuery.OBTENER_GRUPOS);
+            if(before) stmt = connection.prepareStatement(GrupoDAOQuery.OBTENER_COLECCION_GRUPOS_APARTIR_ID_PAGINADA_A_5);
+            else       stmt = connection.prepareStatement(GrupoDAOQuery.OBTENER_COLECCION_GRUPOS_APARTIR_ID_PAGINADA_A_5_after);
+            stmt.setTimestamp(1, new Timestamp(timestamp));
             ResultSet rs = stmt.executeQuery();
+            boolean first = true;
              while (rs.next()) {
                grup = new Grupo();
                 grup.setId(rs.getString("id"));
                 grup.setNombre(rs.getString("nombre"));
+                 grup.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                 grup.setLastModified(rs.getTimestamp("last_modified").getTime());
+                 if (first) {
+                     grupocollection.setNewestTimestamp(grup.getLastModified());
+                     first = false;
+                 }
+                 grupocollection.setOldestTimestamp(grup.getLastModified());
                  grupocollection.getGrupos().add(grup);
             }
         }
-        catch (SQLException e)
-        {
-        throw e;
-        }
+        catch (SQLException e){throw e;}
         finally
         {
             if (stmt != null) stmt.close();
-            if (connection != null) connection.close();
+            if (connection != null)
+            {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
         }
         return grupocollection;
     }
@@ -212,9 +220,8 @@ public class GrupoDAOImpl implements GrupoDAO{
         }
         return grupo;
     }
-
     @Override
-    public boolean eliminar_grupo (String nombregrupo) throws GrupoNoExisteException, SQLException{
+    public boolean eliminar_grupo(String nombregrupo) throws GrupoNoExisteException, SQLException{
         Connection connection = null;
         PreparedStatement stmt = null;
 
@@ -242,8 +249,27 @@ public class GrupoDAOImpl implements GrupoDAO{
 
 
     }
+    @Override
+    public Grupo editar_grupo(Grupo grupo) throws SQLException {
 
-    public boolean editar_grupo (String nombregrupo,String nombrenuevo) throws GrupoNoExisteException, SQLException{
-        return true;
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+            stmt = connection.prepareStatement(GrupoDAOQuery.MODIFICAR_NOMBRE_GRUPO);
+            stmt.setString(1, grupo.getNombre());
+            stmt.setString(2, grupo.getId());
+
+            int rows = stmt.executeUpdate();
+
+            if (rows == 1) grupo = obtener_NOMBRE_por_ID(grupo.getId());
+
+        } catch (SQLException e) {throw e;}
+
+        finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return grupo;
     }
 }

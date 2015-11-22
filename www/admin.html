@@ -4,9 +4,23 @@
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
     <title>Grouptalk Example</title>
   </head>
-    <h1>Página Administrador</h1>
+  
   <body>
-    <div class="row">
+    
+    <table width="100%" height="250px" cellspacing="1px" border="1px">
+   <tr height="50px">
+      <td colspan="2px">
+         <table title="Banner" border="0">
+            <tr>
+               <td>Página Administrador</td>
+            </tr>
+         </table>
+      </td>
+   </tr>
+   <tr height="200px">
+      <td>
+         <table title="Menu administrador" border="0" width="100px">
+            <div class="row">
       <h3 class="panel-title">Crear nuevo grupo</h3>
 		  <span class="input-group-addon">Nombre grupo</span> 
 			<input class="form-control" id="nombre_grupo_crear"type="text">		  
@@ -14,8 +28,7 @@
 			<div class="row">
 				<span id="resultado"></span>
 			</div>
-			
-			
+					
 		<h3 class="panel-title">Eliminar Grupo</h3>
 		    <span class="input-group-addon">Nombre grupo</span> 
 			<input class="form-control" id="nombre_grupo_eliminar"type="text">		  
@@ -28,17 +41,37 @@
 			<input class="form-control" id="nombre_grupo_editar"type="text">
 			<span class="input-group-addon">Introducir nombre nuevo</span> 
 			<input class="form-control" id="nombre_nuevo_a_asignar"type="text">
-			<button type="button" class="btn btn-info" id="button_obtener_grupo_edit">Editar Grupo</button>
-			<button type="button" class="btn btn-info" id="button_editar_grupo">Guardar</button>
+			<button type="button" class="btn btn-info" id="button_cambiar_nombre_grupo">Aplicar cambios</button>			
 			<div class="row">
 				<span id="resultado_edit"></span>
 			</div>
-    
+		<h3 class="panel-title">Obtener Grupos</h3>
+		<button type="button" class="btn btn-info" id="button_obtener_grupos">Obtener Grupos</button>
+		    </div>
+		<h3 class="panel-title">Obtener Grupos paginados</h3>
+		<button type="button" class="btn btn-info" id="button_obtener_grupos_paginados">Obtener Grupos paginados</button>
+         </table>
+      </td>
+      <td>
+         <table title="Contenido" border="0" width="400px">
+            <tr>
+			<div class="row">
+		  <h3 class="panel-title">Lista grupos</h3>
+		  <span id="repos_result"></span>
+			</div>
+			  
+			   
+            </tr>
+         </table>
+     </td>
+  </tr>
+</table>
 	
     <!-- jQuery -->
      <script src="js/jquery.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+	<script src="js/weblinking.js"></script>
 	<script src="js/jquery.cookie.js"></script>
 	<script src="js/admin.js"></script>
   </body>

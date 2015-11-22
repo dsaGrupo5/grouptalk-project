@@ -18,6 +18,24 @@ public class Grupo {
     private List<Link> links;
     private String id;
     private String nombre;
+    private long creationTimestamp;
+    private long lastModified;
+
+    public long getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public void setCreationTimestamp(long creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+    }
+
+    public long getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
+    }
 
     public List<Link> getLinks() {
         return links;
