@@ -2,14 +2,14 @@ var API_BASE_URL = "http://127.0.0.1:8080/grouptalk";
 var LOGIN = "";
 var USERID = "";
 var TOKEN = "";
-
+var url= "";
 
 
 $(document).ready(function() {
 	USERID= $.cookie('userid');
 	LOGIN = $.cookie('login');
 	TOKEN = $.cookie('token');
-
+    
 });
 
 
@@ -52,8 +52,10 @@ $("#button_obtener_grupos").click(function(e)
 
 $("#button_obtener_grupos_paginados").click(function(e)
 {
+	var url = API_BASE_URL + '/grupo/obtenergrupos';
 	e.preventDefault();
-	getPagination();
+	getPagination(url);
+	
 });
 
 function crearGrupo(grupo) 
@@ -156,9 +158,9 @@ function obtenerColccionGrupos()
 	})
 	.fail(function(){$("#result").text("No files.");});
 }
-function getPagination() {
+function getPagination(url) {
 	$("#repos_result").text('');
-	var url = API_BASE_URL + '/grupo/obtenergrupos';
+	console.log(url);
 	$.ajax({
 		url : url,
 		type : 'GET',	
@@ -167,10 +169,7 @@ function getPagination() {
 		contentType : 'application/vnd.dsa.grouptalk.grupo.collection+json',
 	}).done(function(data, status, jqxhr) {
 				var response = data;
-				console.log(response);
-				var grupoCollection = new GrupoCollection(response);
-                var linkHeader = jqxhr.getResponseHeader('Link');
-                grupoCollection.buildLinks(linkHeader);
+				var grupoCollection = new GrupoCollection(response);                
 				var html = grupoCollection.toHTML();
 				$("#repos_result").html(html);
 
@@ -180,44 +179,25 @@ function getPagination() {
 
 }
 function GrupoCollection(grupoCollection){
-	
-	this.grupos = grupoCollection;
-console.log(this.grupos);
 	var instance = this;
+	this.grupos = grupoCollection;
 
-	this.buildLinks = function(header){
-		if (header != null ) {
-			this.links = weblinking.parseHeader(header);
-		} else {
-			this.links = weblinking.parseHeader('');
-		}
+	this.obtenerURI= function(rel){
+		var result = new Object;
+		$.each(this.grupos.links, function(i, v){var link = v;if(link.rel==rel){ result = link;}})
+			return result;
 	}
-
-	this.getLink = function(rel){
-                return this.links.getLinkValuesByRel(rel);
-	}
-
-	this.toHTML = function(){
-		var html = '';
-		console.log(this.grupos);
-		$.each(this.grupos.grupos, function(i, v) {
-			var grupo = v;
-			console.log(grupo.nombre);
-			html = html.concat('<br><strong> Name: ' + grupo.nombre + '</strong><br>');
-			
-		});
+	this.toHTML = function(){		
 		
+		var html = '';		
+		$.each(this.grupos.grupos, function(i, v) {var grupo = v;html = html.concat('<br><strong> Name: ' + grupo.nombre + '</strong><br>');});		
 		html = html.concat(' <br> ');
-
-                var prev = this.getLink('prev');
-		if (prev.length == 1) {
-			html = html.concat(' <a onClick="getRepos(\'' + prev[0].href + '\');" style="cursor: pointer; cursor: hand;">[Prev]</a> ');
-		}
-                var next = this.getLink('next');
-		if (next.length == 1) {
-			html = html.concat(' <a onClick="getRepos(\'' + next[0].href + '\');" style="cursor: pointer; cursor: hand;">[Next]</a> ');
-		}
-		console.log(html);
+        var prev1 = this.obtenerURI('prev');
+	    var prev2 = this.obtenerURI('next');
+		html = html.concat(' <a onClick="getPagination(\''+ prev1.uri + '\');" style="cursor: pointer; cursor: hand;">[Prev]</a> ');
+ 		html = html.concat(' <a onClick="getPagination(\''+ prev2.uri + '\');" style="cursor: pointer; cursor: hand;">[Next]</a> ');
+		
+		
  		return html;	
 	}
 
